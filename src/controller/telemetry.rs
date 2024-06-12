@@ -1,6 +1,5 @@
-use std::borrow::Borrow;
 
-use opentelemetry::trace::{FutureExt, TraceId};
+use opentelemetry::trace::{TraceId};
 use tracing_opentelemetry::OpenTelemetrySpanExt;
 use tracing_subscriber::{prelude::*, EnvFilter, Registry};
 
