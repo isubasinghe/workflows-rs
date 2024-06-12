@@ -35,33 +35,38 @@ pub struct WorkflowSpec {
 }
 
 #[derive( Deserialize, Serialize, Clone, Debug, JsonSchema)]
-pub enum Input {
-    Param,
-    Null
+pub struct Parameter {
+}
+
+pub type Parameters = Vec<Parameter>;
+
+#[derive( Deserialize, Serialize, Clone, Debug, JsonSchema)]
+pub struct Artifact {
+}
+
+pub type Artifacts = Vec<Artifact>;
+
+#[derive( Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
+pub struct Input {
+    parameters: Option<Parameters>,
+    artifacts: Option<Artifact>
 }
 
 #[derive( Deserialize, Serialize, Clone, Debug, JsonSchema)]
-pub enum Output {
-    Param,
-    Null
+pub struct Output {
+    parameters: Option<Parameters>,
+    artifacts: Option<Artifact>,
+    result: Option<String>,
+    exit_code: Option<String>
 }
 
-impl Default for Output {
-    fn default() -> Self {
-        Output::Null
-    }
-}
-
-impl Default for Input {
-    fn default() -> Self {
-        Input::Null
-    }
-}
 
 #[derive(Default, Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub struct DAGTask {
     pub name: String,
+    pub template: String,
     pub dependencies: Option<Vec<String>>,
+    pub depends: Option<String>,
     pub inputs: Option<Vec<Input>>,
     pub outputs: Option<Vec<Output>>
 }
@@ -69,28 +74,19 @@ pub struct DAGTask {
 
 #[derive(Default, Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub struct DAGTemplate {
-    pub tasks: Vec<DAGTask>
+    pub target: Option<String>,
+    pub tasks: Vec<DAGTask>,
+    pub fail_fast: Option<bool>
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub struct Template {
     pub name: String,
-    pub dag: DAGTemplate,
-    pub share_pod: Option<bool>,
+    pub inputs: Vec<Input>,
+    pub outputs: Vec<Output>,
+    pub dag: Option<DAGTemplate>
 }
 
-impl Default for Template {
-    fn default() -> Self {
-        let name = String::default();
-        let dag = DAGTemplate::default();
-        let share_pod = Some(false);
-        Self {
-            name,
-            dag,
-            share_pod,
-        }
-    }
-}
 
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub enum TaskStatus {
