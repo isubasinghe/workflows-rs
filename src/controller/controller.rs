@@ -120,9 +120,8 @@ impl Workflow {
         match x {
             Ok(w) => {
                 println!("GOT {:#?}", w);
-            },
-            Err(e) => {
             }
+            Err(e) => {}
         }
         // If no events were received, check back every 5 minutes
         Ok(Action::requeue(Duration::from_secs(5 * 60)))

@@ -25,6 +25,6 @@ impl Error {
 }
 
 pub mod controller;
+pub mod dag;
 pub mod metrics;
 pub mod telemetry;
-pub mod dag;

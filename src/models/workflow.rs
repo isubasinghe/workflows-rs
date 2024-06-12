@@ -1,7 +1,10 @@
 #![allow(unused_imports)]
 
+use crate::models::k8s_simple::*;
 use chrono::{DateTime, Utc};
+
 use futures::StreamExt;
+
 use kube::{
     api::{Api, ListParams, Patch, PatchParams, ResourceExt},
     client::Client,
@@ -34,32 +37,29 @@ pub struct WorkflowSpec {
     pub entrypoint: String,
 }
 
-#[derive( Deserialize, Serialize, Clone, Debug, JsonSchema)]
-pub struct Parameter {
-}
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
+pub struct Parameter {}
 
 pub type Parameters = Vec<Parameter>;
 
-#[derive( Deserialize, Serialize, Clone, Debug, JsonSchema)]
-pub struct Artifact {
-}
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
+pub struct Artifact {}
 
 pub type Artifacts = Vec<Artifact>;
 
-#[derive( Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema, Default)]
 pub struct Input {
     parameters: Option<Parameters>,
-    artifacts: Option<Artifact>
+    artifacts: Option<Artifact>,
 }
 
-#[derive( Deserialize, Serialize, Clone, Debug, JsonSchema)]
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub struct Output {
     parameters: Option<Parameters>,
     artifacts: Option<Artifact>,
     result: Option<String>,
-    exit_code: Option<String>
+    exit_code: Option<String>,
 }
-
 
 #[derive(Default, Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub struct DAGTask {
@@ -68,25 +68,30 @@ pub struct DAGTask {
     pub dependencies: Option<Vec<String>>,
     pub depends: Option<String>,
     pub inputs: Option<Vec<Input>>,
-    pub outputs: Option<Vec<Output>>
+    pub outputs: Option<Vec<Output>>,
 }
-
 
 #[derive(Default, Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub struct DAGTemplate {
     pub target: Option<String>,
     pub tasks: Vec<DAGTask>,
-    pub fail_fast: Option<bool>
+    pub fail_fast: Option<bool>,
 }
+
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
+pub struct Steps {}
+
+#[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
+pub struct Script {}
 
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub struct Template {
     pub name: String,
     pub inputs: Vec<Input>,
     pub outputs: Vec<Output>,
-    pub dag: Option<DAGTemplate>
+    pub dag: Option<DAGTemplate>,
+    pub container: Option<Container>,
 }
-
 
 #[derive(Deserialize, Serialize, Clone, Debug, JsonSchema)]
 pub enum TaskStatus {
